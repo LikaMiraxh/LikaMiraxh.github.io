@@ -1,14 +1,11 @@
 import * as THREE from './libs/three/three.module.js';
 import { OrbitControls } from './libs/three/jsm/OrbitControls.js';
-import { Stats } from './libs/stats.module.js';
 import { ARButton } from './libs/ARButton.js';
 
 class App{
 	constructor(){
 		const container = document.createElement( 'div' );
 		document.body.appendChild( container );
-        
-        this.clock = new THREE.Clock();
         
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 20 );
 		
@@ -31,8 +28,6 @@ class App{
         this.controls.target.set(0, 3.5, 0); // the point in 3D space that the camera will always point towards
         this.controls.update();
         
-        this.stats = new Stats();
-        
         this.initScene();
         this.setupVR();
         
@@ -53,7 +48,7 @@ class App{
         function onSelect() {
             const material = new THREE.MeshPhongMaterial( { color: 0xffffff * Math.random() } );
             const mesh = new THREE.Mesh( self.geometry, material );
-            mesh.position.set( 0, 0, - 0.3 ).applyMatrix4( controller.matrixWorld ); // the position of the mesh will be relative to the position of the controller in the agumented world.
+            mesh.position.set( 0, 0, - 0.3 ).applyMatrix4( controller.matrixWorld ); // the position of the mesh will be relative to the position of the controller in the agumented world
             mesh.quaternion.setFromRotationMatrix( controller.matrixWorld ); // the quaternion of the mesh is set to match the rotation of the controller
             self.scene.add( mesh );
             self.meshes.push( mesh );
@@ -75,8 +70,7 @@ class App{
         this.renderer.setSize( window.innerWidth, window.innerHeight );  
     }
     
-	render( ) {   
-        this.stats.update();
+	render() {   
         this.meshes.forEach( (mesh) => { mesh.rotateY( 0.01 ); });
         this.renderer.render( this.scene, this.camera );
     }
