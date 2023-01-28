@@ -11,7 +11,7 @@
         var scene = document.querySelector("a-scene");
 
         // Create a Three.js geometry for the cube.
-        var cubeGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+        var cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
         // Create a Three.js material for the cube.
         var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
@@ -19,15 +19,17 @@
         // Create a Three.js mesh for the cube.
         var cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
-        // Listen for touchstart events on the scene.
-        scene.addEventListener("touchstart", function (event) {
-          // Get the position of the touch event.
-          var touch = event.changedTouches[0];
-          var touchX = touch.clientX;
-          var touchY = touch.clientY;
+        // Add the cube mesh to the A-Frame scene.
+        scene.add(cubeMesh);
 
-          // Use the WebXR API to create a new XRRay object for the touch position.
-          var xrRay = new XRRay(touchX, touchY);
+        // Listen for mousedown events on the scene.
+        scene.addEventListener("mousedown", function (event) {
+          // Get the position of the mouse event.
+          var mouseX = event.clientX;
+          var mouseY = event.clientY;
+
+          // Use the WebXR API to create a new XRRay object for the mouse position.
+          var xrRay = new XRRay(mouseX, mouseY);
 
           // Use the WebXR API to cast the XRRay to find the first hit on the scene.
           var hit = scene.xr.getHitTestResults(xrRay);
