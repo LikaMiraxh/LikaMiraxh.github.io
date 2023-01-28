@@ -1,69 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@webxr-input-profiles/gaze@0.1.0/dist/webxr-input-profiles-gaze.min.js"></script>
-    <script>
-    var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-var renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
-
-// Create a cube
-var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-var material = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
-var cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
-
-// Position the camera
-camera.position.z = 5;
-
-// Render loop
-var animate = function () {
-    requestAnimationFrame( animate );
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-    renderer.render( scene, camera );
-};
-animate();
-
-// WebXR setup
-navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
-    if(supported){
-        navigator.xr.requestSession('immersive-vr').then((session) => {
-            renderer.xr.setSession(session);
-            session.addEventListener('end', onSessionEnded);
-            session.updateRenderState({baseLayer: new XRWebGLLayer(session, gl)});
-        });
-    }else{
-        console.log("WebXR immersive-vr not supported on this device");
-    }
-});
-
-// Add event listener for click events
-document.body.addEventListener("click", function (event) {
-    var mouseX = event.clientX;
-    var mouseY = event.clientY;
-
-    // Create a new THREE.Raycaster
-    var raycaster = new THREE.Raycaster();
-
-    // Set the origin of the raycaster to the position of the camera
-    raycaster.setFromCamera({x: mouseX, y: mouseY}, camera);
-
-    // Get the first object that the raycaster intersects
-    var intersects = raycaster.intersectObjects(scene.children);
-
-    if (intersects.length > 0) {
-    var hit = intersects[0];
-    cube.position.set(hit.point.x, hit.point.y, hit.point.z);
-    }
-    });
-    </script>
-  </head>
-  <body>
-    
-  </body>
+<body>
+<h1>Hello World</h1>
+<p>I'm hosted with GitHub Pages.</p>
+</body>
 </html>
