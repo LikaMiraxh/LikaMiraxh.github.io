@@ -1,7 +1,60 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+  <head>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.112.1/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@webxr-input-profiles/gaze@0.1.0/dist/webxr-input-profiles-gaze.min.js"></script>
+    <script>
+      // Wait for the DOM to load.
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get a reference to the A-Frame scene.
+        var scene = document.querySelector("a-scene");
+
+        // Create a Three.js geometry for the chair.
+        var chairGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+
+        // Create a Three.js material for the chair.
+        var chairMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+
+        // Create a Three.js mesh for the chair.
+        var chairMesh = new THREE.Mesh(chairGeometry, chairMaterial);
+
+        // Add the chair mesh to the A-Frame scene.
+        scene.add(chairMesh);
+
+        // Listen for touchstart events on the scene.
+        scene.addEventListener("touchstart", function (event) {
+          // Get the position of the touch event.
+          var touch = event.changedTouches[0];
+          var touchX = touch.clientX;
+          var touchY = touch.clientY;
+
+          // Use the WebXR API to create a new XRRay object for the touch position.
+          var xrRay = new XRRay(touchX, touchY);
+
+          // Use the WebXR API to cast the XRRay to find the first hit on the scene.
+          var hit = scene.xr.getHitTestResults(xrRay);
+
+          // Check if a hit was found.
+          if (hit.length > 0) {
+            // Get the hit matrix from the hit.
+            var hitMatrix = hit[0].getPose(scene.xr.referenceSpace);
+
+            // Set the position of the chair mesh to the hit position.
+            chairMesh.position.set(hitMatrix.transform.position.x, hitMatrix.transform.position.y, hitMatrix.transform.position.z);
+
+            // Add the chair mesh to the scene.
+            scene.add(chairMesh);
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <a-camera>
+        <a-cursor></a-cursor>
+      </a-camera>
+    </a-scene>
+  </body>
 </html>
