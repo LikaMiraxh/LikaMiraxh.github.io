@@ -18,7 +18,7 @@ class App{
 		this.scene.add( light );
 			
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true } );
-		this.renderer.setPixelRatio( window.devicePixelRatio );
+		this.renderer.setPixelRatio( window.devicePixelRatio ); // the rendered object will be displayed at the correct resolution on the device, regardless of the device's pixel density
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.outputEncoding = THREE.sRGBEncoding;
         
