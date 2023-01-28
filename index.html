@@ -1,27 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  <script>
-    function createCube() {
-        console.log("createCube function called!");
-        var scene = document.querySelector("a-scene");
-        console.log(scene);
-        var box = document.createElement("a-box");
-        console.log(box);
-        var marker = document.querySelector("a-marker");
-        console.log(marker);
-        box.setAttribute("color", "blue");
-        box.setAttribute("position", "0 0 0");
-        scene.appendChild(box);
-    }
-  </script>
-</head>
-<body style='margin : 0px; overflow: hidden;' onclick="createCube()">
-  <a-scene embedded arjs='sourceType: webcam;'>
-    <a-marker id='my-marker'></a-marker>
-    <a-entity camera></a-entity>
-  </a-scene>
+<body>
+<h1>Hello World</h1>
+<p>I'm hosted with GitHub Pages.</p>
 </body>
 </html>
