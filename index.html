@@ -9,48 +9,49 @@
       document.addEventListener("DOMContentLoaded", function () {
         // Get a reference to the A-Frame scene.
         var scene = document.querySelector("a-scene");
+
         // Create a Three.js geometry for the cube.
-    var cubeGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+        var cubeGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
 
-// Create a Three.js material for the cube.
-var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+        // Create a Three.js material for the cube.
+        var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
 
-// Create a Three.js mesh for the cube.
-var cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        // Create a Three.js mesh for the cube.
+        var cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
+        // Listen for touchstart events on the scene.
+        scene.addEventListener("touchstart", function (event) {
+          // Get the position of the touch event.
+          var touch = event.changedTouches[0];
+          var touchX = touch.clientX;
+          var touchY = touch.clientY;
 
-// Listen for click events on the scene.
-scene.addEventListener("click", function (event) {
-  // Get the position of the click event.
-  var touchX = event.clientX;
-  var touchY = event.clientY;
+          // Use the WebXR API to create a new XRRay object for the touch position.
+          var xrRay = new XRRay(touchX, touchY);
 
-  // Use the WebXR API to create a new XRRay object for the click position.
-  var xrRay = new XRRay(touchX, touchY);
+          // Use the WebXR API to cast the XRRay to find the first hit on the scene.
+          var hit = scene.xr.getHitTestResults(xrRay);
 
-  // Use the WebXR API to cast the XRRay to find the first hit on the scene.
-  var hit = scene.xr.getHitTestResults(xrRay);
+          // Check if a hit was found.
+          if (hit.length > 0) {
+            // Get the hit matrix from the hit.
+            var hitMatrix = hit[0].getPose(scene.xr.referenceSpace);
 
-  // Check if a hit was found.
-  if (hit.length > 0) {
-    // Get the hit matrix from the hit.
-    var hitMatrix = hit[0].getPose(scene.xr.referenceSpace);
+            // Set the position of the cube mesh to the hit position.
+            cubeMesh.position.set(hitMatrix.transform.position.x, hitMatrix.transform.position.y, hitMatrix.transform.position.z);
 
-    // Set the position of the cube mesh to the hit position.
-    cubeMesh.position.set(hitMatrix.transform.position.x, hitMatrix.transform.position.y, hitMatrix.transform.position.z);
-
-    // Add the cube mesh to the scene.
-    scene.add(cubeMesh);
-  }
-});
-});
-</script>
-</head>
-<body>
-  <a-scene>
-    <a-camera>
-      <a-cursor></a-cursor>
-    </a-camera>
-  </a-scene>
-</body>
+            // Add the cube mesh to the scene.
+            scene.add(cubeMesh);
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <a-camera>
+        <a-cursor></a-cursor>
+      </a-camera>
+    </a-scene>
+  </body>
 </html>
