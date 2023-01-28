@@ -20,31 +20,28 @@
         var cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
         // Add the cube mesh to the A-Frame scene.
-        scene.add(cubeMesh);
+        // scene.add(cubeMesh);
 
         // Listen for mousedown events on the scene.
-        scene.addEventListener("mousedown", function (event) {
+        scene.addEventListener("click", function (event) {
           // Get the position of the mouse event.
           var mouseX = event.clientX;
           var mouseY = event.clientY;
 
-          // Use the WebXR API to create a new XRRay object for the mouse position.
-          var xrRay = new XRRay(mouseX, mouseY);
+                    // Create a new THREE.Raycaster
+            var raycaster = new THREE.Raycaster();
 
-          // Use the WebXR API to cast the XRRay to find the first hit on the scene.
-          var hit = scene.xr.getHitTestResults(xrRay);
+            // Set the origin of the raycaster to the position of the camera
+            raycaster.setFromCamera({x: mouseX, y: mouseY}, camera);
 
-          // Check if a hit was found.
-          if (hit.length > 0) {
-            // Get the hit matrix from the hit.
-            var hitMatrix = hit[0].getPose(scene.xr.referenceSpace);
+            // Get the first object that the raycaster intersects
+            var intersects = raycaster.intersectObjects(scene.children);
 
-            // Set the position of the cube mesh to the hit position.
-            cubeMesh.position.set(hitMatrix.transform.position.x, hitMatrix.transform.position.y, hitMatrix.transform.position.z);
-
-            // Add the cube mesh to the scene.
+            if (intersects.length > 0) {
+            var hit = intersects[0];
+            cubeMesh.position.set(hit.point.x, hit.point.y, hit.point.z);
             scene.add(cubeMesh);
-          }
+            }
         });
       });
     </script>
