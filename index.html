@@ -7,41 +7,40 @@
     <script>
       // Wait for the DOM to load.
       document.addEventListener("DOMContentLoaded", function () {
-        // Get a reference to the A-Frame scene.
-        var scene = document.querySelector("a-scene");
+    // Get a reference to the A-Frame scene.
+    var scene = document.querySelector("a-scene");
 
-        // Create a Three.js geometry for the cube.
-        var cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+    // Create a Three.js geometry for the cube.
+    var cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
-        // Create a Three.js material for the cube.
-        var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+    // Create a Three.js material for the cube.
+    var cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
 
-        // Create a Three.js mesh for the cube.
-        var cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    // Create a Three.js mesh for the cube.
+    var cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    // Add the cube mesh to the A-Frame scene.
+    // scene.add(cubeMesh);
+    var camera = document.querySelector("a-camera").components.camera.camera;
+    // Listen for mousedown events on the scene.
+    scene.addEventListener("click", function (event) {
+      // Get the position of the mouse event.
+      var mouseX = event.touches[0].clientX;
+      var mouseY = event.touches[0].clientY;
 
-        // Add the cube mesh to the A-Frame scene.
-        // scene.add(cubeMesh);
-        var camera = document.querySelector("a-camera").components.camera.camera;
-        // Listen for mousedown events on the scene.
-        scene.addEventListener("click", function (event) {
-          // Get the position of the mouse event.
-          var mouseX = event.clientX;
-          var mouseY = event.clientY;
+                // Create a new THREE.Raycaster
+        var raycaster = new THREE.Raycaster();
 
-                    // Create a new THREE.Raycaster
-            var raycaster = new THREE.Raycaster();
+        // Set the origin of the raycaster to the position of the camera
+        raycaster.setFromCamera({x: mouseX, y: mouseY}, camera);
 
-            // Set the origin of the raycaster to the position of the camera
-            raycaster.setFromCamera({x: mouseX, y: mouseY}, camera);
+        // Get the first object that the raycaster intersects
+        var intersects = raycaster.intersectObjects(scene.children);
 
-            // Get the first object that the raycaster intersects
-            var intersects = raycaster.intersectObjects(scene.children);
-
-            if (intersects.length > 0) {
-            var hit = intersects[0];
-            cubeMesh.position.set(hit.point.x, hit.point.y, hit.point.z);
-            scene.add(cubeMesh);
-            }
+        if (intersects.length > 0) {
+        var hit = intersects[0];
+        cubeMesh.position.set(hit.point.x, hit.point.y, hit.point.z);
+        scene.add(cubeMesh);
+        }
         });
       });
     </script>
