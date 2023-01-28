@@ -28,7 +28,7 @@ class App{
 		container.appendChild( this.renderer.domElement );
         
         this.controls = new OrbitControls( this.camera, this.renderer.domElement );
-        this.controls.target.set(0, 3.5, 0);
+        this.controls.target.set(0, 3.5, 0); // the point in 3D space that the camera will always point towards
         this.controls.update();
         
         this.stats = new Stats();
@@ -45,16 +45,16 @@ class App{
     }
     
     setupVR(){
-        this.renderer.xr.enabled = true; 
+        this.renderer.xr.enabled = true; //enabling VR/AR
         
         const self = this;
-        let controller;
+        let controller; // in this case controller is the screen of the phone itself
         
         function onSelect() {
             const material = new THREE.MeshPhongMaterial( { color: 0xffffff * Math.random() } );
             const mesh = new THREE.Mesh( self.geometry, material );
-            mesh.position.set( 0, 0, - 0.3 ).applyMatrix4( controller.matrixWorld );
-            mesh.quaternion.setFromRotationMatrix( controller.matrixWorld );
+            mesh.position.set( 0, 0, - 0.3 ).applyMatrix4( controller.matrixWorld ); // the position of the mesh will be relative to the position of the controller in the agumented world.
+            mesh.quaternion.setFromRotationMatrix( controller.matrixWorld ); // the quaternion of the mesh is set to match the rotation of the controller
             self.scene.add( mesh );
             self.meshes.push( mesh );
 
@@ -62,8 +62,8 @@ class App{
 
         const btn = new ARButton( this.renderer );
         
-        controller = this.renderer.xr.getController( 0 );
-        controller.addEventListener( 'select', onSelect );
+        controller = this.renderer.xr.getController( 0 ); // gets the first controller that is connected to the WebXR system (mobile phone)
+        controller.addEventListener( 'select', onSelect ); // listens for select event which is triggered when the user clicks on the screen, then the function onSelect is called
         this.scene.add( controller );
         
         this.renderer.setAnimationLoop( this.render.bind(this) );
